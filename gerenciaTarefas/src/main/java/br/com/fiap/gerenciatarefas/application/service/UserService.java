@@ -5,7 +5,9 @@ import br.com.fiap.gerenciatarefas.application.usecases.UserUsecases;
 import br.com.fiap.gerenciatarefas.core.user.DTO.AuthenticationRequestDTO;
 import br.com.fiap.gerenciatarefas.core.user.DTO.LoginResponseDTO;
 import br.com.fiap.gerenciatarefas.core.user.DTO.RegisterDTO;
+import br.com.fiap.gerenciatarefas.core.user.User;
 import br.com.fiap.gerenciatarefas.core.user.port.UserRepositoryPort;
+import br.com.fiap.gerenciatarefas.infra.security.Exception.RegisterFailedException;
 import br.com.fiap.gerenciatarefas.utils.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,7 +36,7 @@ public class UserService implements UserUsecases {
     public void registerUser(RegisterDTO registerDTO) {
         if(userRepositoryPort.findByLogin(registerDTO.getLogin()) != null)
         {
-            throw new RuntimeException();
+            throw new RegisterFailedException();
         }
         String passwordEncrypted = new BCryptPasswordEncoder().encode(registerDTO.getPassword());
         UserJpa userJpa = userMapper.requestToUser(registerDTO,passwordEncrypted);
@@ -45,7 +47,7 @@ public class UserService implements UserUsecases {
     public LoginResponseDTO login(AuthenticationRequestDTO request) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(request.getLogin(), request.getPassword());
         var auth = authManager.authenticate(usernamePassword);
-        String login = auth.getPrincipal().toString();
+        UserJpa login = (UserJpa) auth.getPrincipal();
         var token = this.tokenService.generateToken(login);
         return this.userMapper.requestToLogin(token);
     }

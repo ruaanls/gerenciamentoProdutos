@@ -1,7 +1,8 @@
 package br.com.fiap.gerenciatarefas.infra.security.config;
 
 import br.com.fiap.gerenciatarefas.adapters.outbound.JPA.repositories.JpaUserRepository;
-import br.com.fiap.gerenciatarefas.infra.security.Services.TokenService;
+import br.com.fiap.gerenciatarefas.adapters.outbound.security.TokenServicePort;
+import br.com.fiap.gerenciatarefas.infra.security.Services.TokenServiceImpl;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.servlet.FilterChain;
@@ -16,13 +17,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    TokenService tokenService;
+    TokenServicePort tokenService;
 
     @Autowired
     JpaUserRepository userRepository;

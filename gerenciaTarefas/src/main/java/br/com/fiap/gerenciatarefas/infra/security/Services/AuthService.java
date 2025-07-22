@@ -2,6 +2,7 @@ package br.com.fiap.gerenciatarefas.infra.security.Services;
 
 import br.com.fiap.gerenciatarefas.adapters.outbound.JPA.repositories.JpaUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,10 +20,10 @@ public class AuthService implements UserDetailsService
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
         UserDetails user = jpaUserRepository.findByLogin(username);
-        //if(user == null)
-        //{
-
-        //}
+        if(user == null)
+        {
+            throw new InternalAuthenticationServiceException("Usuário não encontrado: " + username);
+        }
         return user;
 
     }
