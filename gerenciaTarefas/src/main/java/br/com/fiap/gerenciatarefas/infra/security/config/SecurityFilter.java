@@ -1,6 +1,6 @@
 package br.com.fiap.gerenciatarefas.infra.security.config;
 
-import br.com.fiap.gerenciatarefas.adapters.outbound.repositories.JpaUserRepository;
+import br.com.fiap.gerenciatarefas.adapters.outbound.JPA.repositories.JpaUserRepository;
 import br.com.fiap.gerenciatarefas.infra.security.Services.TokenService;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
+
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
@@ -36,12 +38,13 @@ public class SecurityFilter extends OncePerRequestFilter {
                 var login = tokenService.validateToken(token);
                 // Com o login do usuário procurar no banco de dados e receber um user do tipo UserDetails
                 UserDetails user = userRepository.findByLogin(login);
-
                 // Autenticar o usuário com a classe especial do spring security UsernamePasswordAuthenticationToken, os parametros são sempre dessa forma
                 // Ela serve para autenticar o usuário e saber quais roles ele tem acesso
                 var authentication = new UsernamePasswordAuthenticationToken(user, null , user.getAuthorities());
                 // Salvando o token da autenticação no contexto do spring
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
             }
             catch (TokenExpiredException e) {
                 // Token expirado - será capturado pelo AuthenticationEntryPoint

@@ -1,6 +1,6 @@
 package br.com.fiap.gerenciatarefas.infra.security.Services;
 
-import br.com.fiap.gerenciatarefas.adapters.outbound.JPA.entities.UserJpa;
+import br.com.fiap.gerenciatarefas.adapters.outbound.security.TokenServicePort;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -14,19 +14,19 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Service
-public class TokenService
+public class TokenServiceImpl implements TokenServicePort
 {
     @Value("${JWT_SECRET:my-secret-key}")
     private String secret;
 
-    public String generateToken(String user)
-    {
+    @Override
+    public String generateToken(String subject) {
         try
         {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("apisecurity")
-                    .withSubject(user)
+                    .withSubject(subject)
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
         }
@@ -35,8 +35,9 @@ public class TokenService
             throw new RuntimeException("Erro ao gerar token: ", e.getCause());
         }
     }
-    public String validateToken(String token)
-    {
+
+    @Override
+    public String validateToken(String token) {
         try
         {
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -55,10 +56,10 @@ public class TokenService
         }
     }
 
-
-    private Instant genExpirationDate()
-    {
+    @Override
+    public Instant genExpirationDate() {
         return LocalDateTime.now().plusMinutes(15).toInstant(ZoneOffset.systemDefault().getRules().getOffset(Instant.now()));
-
     }
+
+
 }

@@ -1,4 +1,4 @@
-package br.com.fiap.gerenciatarefas.adapters.outbound.entities;
+package br.com.fiap.gerenciatarefas.adapters.outbound.JPA.entities;
 
 import br.com.fiap.gerenciatarefas.core.user.UserRole;
 import jakarta.persistence.*;
@@ -78,5 +78,33 @@ public class UserJpa implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public UserRole getUser_role() {
+        return user_role;
+    }
+
+    public void setUser_role(UserRole user_role) {
+        this.user_role = user_role;
     }
 }
