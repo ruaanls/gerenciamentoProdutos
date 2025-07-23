@@ -1,5 +1,6 @@
 package br.com.fiap.gerenciatarefas.infra.security.Services;
 
+import br.com.fiap.gerenciatarefas.adapters.outbound.JPA.entities.UserJpa;
 import br.com.fiap.gerenciatarefas.adapters.outbound.security.TokenServicePort;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -20,13 +21,13 @@ public class TokenServiceImpl implements TokenServicePort
     private String secret;
 
     @Override
-    public String generateToken(String subject) {
+    public String generateToken(UserJpa userJpa) {
         try
         {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("apisecurity")
-                    .withSubject(subject)
+                    .withSubject(userJpa.getLogin())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
         }
@@ -46,7 +47,6 @@ public class TokenServiceImpl implements TokenServicePort
                     .build()
                     .verify(token)
                     .getSubject();
-
         }
         catch (TokenExpiredException e)
         {

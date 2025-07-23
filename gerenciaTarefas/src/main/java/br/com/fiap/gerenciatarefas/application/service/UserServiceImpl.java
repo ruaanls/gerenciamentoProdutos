@@ -5,7 +5,6 @@ import br.com.fiap.gerenciatarefas.application.usecases.UserUsecases;
 import br.com.fiap.gerenciatarefas.core.user.DTO.AuthenticationRequestDTO;
 import br.com.fiap.gerenciatarefas.core.user.DTO.LoginResponseDTO;
 import br.com.fiap.gerenciatarefas.core.user.DTO.RegisterDTO;
-import br.com.fiap.gerenciatarefas.core.user.User;
 import br.com.fiap.gerenciatarefas.core.user.port.UserRepositoryPort;
 import br.com.fiap.gerenciatarefas.infra.security.Exception.RegisterFailedException;
 import br.com.fiap.gerenciatarefas.utils.mapper.UserMapper;
@@ -16,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements UserUsecases {
+public class UserServiceImpl implements UserUsecases {
 
     @Autowired
     private final UserRepositoryPort userRepositoryPort;
@@ -27,7 +26,7 @@ public class UserService implements UserUsecases {
     @Autowired
     private TokenServicePort tokenService;
 
-    public UserService(UserRepositoryPort userRepositoryPort, UserMapper userMapper) {
+    public UserServiceImpl(UserRepositoryPort userRepositoryPort, UserMapper userMapper) {
         this.userRepositoryPort = userRepositoryPort;
         this.userMapper = userMapper;
     }

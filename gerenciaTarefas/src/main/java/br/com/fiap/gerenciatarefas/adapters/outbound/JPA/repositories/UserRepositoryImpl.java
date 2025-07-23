@@ -31,4 +31,16 @@ public class UserRepositoryImpl implements UserRepositoryPort {
         UserDetails user = this.jpaUserRepository.findByLogin(login);
         return user;
     }
+
+    @Override
+    public Optional<UserJpa> findUserJpaByLogin(String login) {
+        if(this.jpaUserRepository.findUserJpaByLogin(login).isEmpty())
+        {
+            throw new RuntimeException();
+        }
+        else
+        {
+            return this.jpaUserRepository.findUserJpaByLogin(login);
+        }
+    }
 }

@@ -9,4 +9,5 @@ public interface UserRepositoryPort
 {
     void registerUser(UserJpa user);
     UserDetails findByLogin(String login);
+    Optional<UserJpa> findUserJpaByLogin(String login);
 }

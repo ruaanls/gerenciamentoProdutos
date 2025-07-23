@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
+import java.util.Optional;
+
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -24,4 +26,13 @@ public interface UserMapper {
             @Mapping(source = "token", target = "token")
     })
     LoginResponseDTO requestToLogin(String token);
+
+    @Mappings({
+            @Mapping(source = "userJpa.id", target = "id"),
+            @Mapping(source = "userJpa.login", target = "login"),
+            @Mapping(source = "userJpa.password", target = "password"),
+            @Mapping(source = "userJpa.user_role", target = "user_role"),
+            @Mapping(target = "authorities", ignore = true)
+    })
+    UserJpa optionalToUser(UserJpa userJpa);
 }
