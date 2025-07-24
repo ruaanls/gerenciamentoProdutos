@@ -32,10 +32,14 @@ Sistema completo para gerenciamento de tarefas, com autenticação, controle de 
      ```
 
 3. **Execução:**
-   - Rode a aplicação:
-     ```bash
-     ./gradlew bootRun
-     ```
+   Rode o arquivo ProductSecurityApplication ou faça esse comando
+```bash
+./gradlew bootRun
+```
+Link do vídeo de demonstração da aplicação funcionando em: https://www.youtube.com/watch?v=NMVFHp0BZLU
+
+A aplicação estará disponível pelo IP de sua máquina utilizando o conteiner docker através do dockerfile.   
+ou localmente em `http://localhost:8080`
 
 ## Endpoints
 
