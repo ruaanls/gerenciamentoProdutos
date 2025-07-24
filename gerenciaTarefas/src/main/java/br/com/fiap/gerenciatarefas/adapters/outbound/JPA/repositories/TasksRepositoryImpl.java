@@ -8,6 +8,7 @@ import br.com.fiap.gerenciatarefas.infra.security.Exception.UserNotFoundExceptio
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -49,7 +50,16 @@ public class TasksRepositoryImpl implements TasksRepositoryPort
     @Override
     public TasksJPA findTaskById(Long id)
     {
-        return this.jpaTasksRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task não encontrada com o id: " + id + " Por favor passe um id de uma task existente"));
+        TasksJPA tasksJPA = this.jpaTasksRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task não encontrada com o id: " + id + " Por favor passe um id de uma task existente"));
+        if(tasksJPA == null)
+        {
+            throw new TaskNotFoundException("Task não encontrada com o id: " + id + " Por favor passe um id de uma task existente");
+        }
+        else
+        {
+            return tasksJPA;
+        }
+
     }
 
     @Override
@@ -58,7 +68,8 @@ public class TasksRepositoryImpl implements TasksRepositoryPort
         {
             throw new UserNotFoundException();
         }
-        else{
+        else
+        {
             Page<TasksJPA> allTasks =  this.jpaTasksRepository.findAllTasksByUserId_Login(pageable, username);
             if(allTasks.getTotalElements() == 0L)
             {

@@ -1,9 +1,11 @@
 package br.com.fiap.gerenciatarefas.infra.security.Exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -51,6 +53,37 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Exception);
     }
 
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
+        String message = "Dados inválidos fornecidos";
+
+        // Verifica se é erro de ENUM
+        if (ex.getCause() instanceof InvalidFormatException) {
+            InvalidFormatException invalidFormatException = (InvalidFormatException) ex.getCause();
+
+            if (invalidFormatException.getTargetType().isEnum()) {
+                Object[] enumValues = invalidFormatException.getTargetType().getEnumConstants();
+                String validValues = java.util.Arrays.toString(enumValues)
+                        .replace("[", "")
+                        .replace("]", "");
+
+                message = String.format(
+                        "Valor inválido '%s' para o campo '%s'. Valores aceitos: %s",
+                        invalidFormatException.getValue(),
+                        invalidFormatException.getPath().get(invalidFormatException.getPath().size() - 1).getFieldName(),
+                        validValues
+                );
+            }
+        }
+
+        AuthInvalid authInvalid = new AuthInvalid(HttpStatus.BAD_REQUEST, message);
+        return new ResponseEntity<>(authInvalid, HttpStatus.BAD_REQUEST);
+    }
 
 
 

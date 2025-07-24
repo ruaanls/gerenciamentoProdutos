@@ -2,6 +2,7 @@ package br.com.fiap.gerenciatarefas.adapters.outbound.JPA.repositories;
 
 import br.com.fiap.gerenciatarefas.adapters.outbound.JPA.entities.UserJpa;
 import br.com.fiap.gerenciatarefas.core.user.port.UserRepositoryPort;
+import br.com.fiap.gerenciatarefas.infra.security.Exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
@@ -36,7 +37,7 @@ public class UserRepositoryImpl implements UserRepositoryPort {
     public Optional<UserJpa> findUserJpaByLogin(String login) {
         if(this.jpaUserRepository.findUserJpaByLogin(login).isEmpty())
         {
-            throw new RuntimeException();
+            throw new UserNotFoundException();
         }
         else
         {
