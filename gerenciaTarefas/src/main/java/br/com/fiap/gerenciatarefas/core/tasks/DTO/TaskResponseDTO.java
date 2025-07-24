@@ -4,6 +4,7 @@ import br.com.fiap.gerenciatarefas.core.tasks.StatusTask;
 
 public class TaskResponseDTO
 {
+    private Long id;
     private String titulo;
     private String descricao;
     private String prazo;
@@ -48,5 +49,13 @@ public class TaskResponseDTO
 
     public void setAutor(String autor) {
         this.autor = autor;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -30,6 +30,30 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Exception);
     }
 
+    @ExceptionHandler(TaskNotFoundException.class)
+    private ResponseEntity<AuthInvalid> taskNotFoundHandler(TaskNotFoundException exception)
+    {
+        AuthInvalid Exception = new AuthInvalid(HttpStatus.NOT_FOUND,exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Exception);
+    }
+
+    @ExceptionHandler(NoTasksFindException.class)
+    private ResponseEntity<AuthInvalid> noTasksFoundHandler(NoTasksFindException exception)
+    {
+        AuthInvalid Exception = new AuthInvalid(HttpStatus.NOT_FOUND,exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Exception);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    private ResponseEntity<AuthInvalid> userNotFoundHandler(UserNotFoundException exception)
+    {
+        AuthInvalid Exception = new AuthInvalid(HttpStatus.NOT_FOUND,exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Exception);
+    }
+
+
+
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,

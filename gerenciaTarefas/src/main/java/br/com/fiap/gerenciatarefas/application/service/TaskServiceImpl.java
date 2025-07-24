@@ -72,6 +72,7 @@ public class TaskServiceImpl implements TaskUsecases
 
     @Override
     public Page<TaskResponseDTO> findAllTasks(Pageable pageable, String username) {
+
         Page<TasksJPA> tasks = this.tasksRepository.findAllTasksByUsername(pageable,username);
         Page<TaskResponseDTO> taskResponseDTOS = tasks.map(this.tasksMapper::taskToResponse);
         return taskResponseDTOS;

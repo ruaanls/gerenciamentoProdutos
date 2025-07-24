@@ -24,7 +24,7 @@ public interface TasksMapper
     TasksJPA requestToTask(TaskRequestDTO taskRequestDTO, UserJpa user);
 
     @Mappings({
-
+            @Mapping(source = "tasksJPA.id", target = "id"),
             @Mapping(source = "tasksJPA.titulo", target = "titulo"),
             @Mapping(source = "tasksJPA.descricao", target = "descricao"),
             @Mapping(source = "tasksJPA.prazo", target = "prazo"),
